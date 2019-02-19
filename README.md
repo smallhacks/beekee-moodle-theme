@@ -1,2 +1,2 @@
-# beekee_moodle_theme
-Beekee Moodle theme
+# Beekee Moodle Theme
+The theme used in the [Beekee Box](http://www.beekee.ch).
