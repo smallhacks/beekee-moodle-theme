@@ -556,7 +556,7 @@ class core_renderer extends \core_renderer {
             }
 
             // Manage users
-            if (has_capability('moodle/site:config', $context)) {
+            if (has_capability('moodle/user:create', $context)) {
                 $text = get_string('manageusers','theme_beekee');
                 $url = new moodle_url('/admin/user.php');
                 $link = new action_link($url, $text, null, null, new pix_icon('i/users', $text));
@@ -564,7 +564,7 @@ class core_renderer extends \core_renderer {
             }
 
             // Manage courses
-            if (has_capability('moodle/site:config', $context)) {
+            if (has_capability('moodle/course:create', $context)) {
                 $text = get_string('managecourses');
                 $url = new moodle_url('/course/management.php');
                 $link = new action_link($url, $text, null, null, new pix_icon('e/bullet_list', $text));
@@ -579,10 +579,21 @@ class core_renderer extends \core_renderer {
                 $menu->add_secondary_action($link);
             }
 
-            // Manage users
+            // Site administration
             if (has_capability('moodle/site:config', $context)) {
                 $text = get_string('siteadministration','theme_beekee');
                 $url = new moodle_url('/admin/search.php');
+                $link = new action_link($url, $text, null, null, new pix_icon('t/edit', $text));
+                $menu->add_secondary_action($link);
+            }
+
+            // MoodleBox administration
+
+            // Check if MoodleBox is installed and if is admin
+            $installedplugins = \core_plugin_manager::instance()->get_plugins_of_type('tool');
+            if (array_key_exists("beekeebox",$installedplugins) && has_capability('moodle/site:config', $context)) {
+                $text = get_string('boxadministration','theme_beekee');
+                $url = new moodle_url('/admin/tool/beekeebox/index.php');
                 $link = new action_link($url, $text, null, null, new pix_icon('t/edit', $text));
                 $menu->add_secondary_action($link);
             }
@@ -610,6 +621,65 @@ class core_renderer extends \core_renderer {
             // }
         } else if ($showcoursemenu) {
 
+            // BEEKEE : add enrol me item (need to be cleaned)
+
+                global $CFG;
+
+                $coursecontext = context_course::instance($this->page->course->id);
+               // $this->page->course
+
+                $instances = enrol_get_instances($this->page->course->id, true);
+                $plugins   = enrol_get_plugins(true);
+
+                if ($course->id != SITEID) {
+                    if (isguestuser() or !isloggedin()) {
+                        // guest account can not be enrolled - no links for them
+                    } else if (is_enrolled($coursecontext)) {
+                        // unenrol link if possible
+                        foreach ($instances as $instance) {
+                            if (!isset($plugins[$instance->enrol])) {
+                                continue;
+                            }
+                            $plugin = $plugins[$instance->enrol];
+                            if ($unenrollink = $plugin->get_unenrolself_link($instance)) {
+
+                                $shortname = format_string($this->page->course->shortname, true, array('context' => $coursecontext));
+                                $text = get_string('unenrolme', 'core_enrol', $shortname);
+                                $link = new action_link($unenrollink, $text, null, null, new pix_icon('i/user', $text));
+                                $menu->add_secondary_action($link);
+                                //TODO. deal with multiple unenrol links - not likely case, but still...
+                            }
+                        }
+                    } else {
+                        // enrol link if possible
+                        if (is_viewing($coursecontext)) {
+                            // better not show any enrol link, this is intended for managers and inspectors
+                        } else {
+                            foreach ($instances as $instance) {
+                                if (!isset($plugins[$instance->enrol])) {
+                                    continue;
+                                }
+                                $plugin = $plugins[$instance->enrol];
+                                if ($plugin->show_enrolme_link($instance)) {
+
+                                    $shortname = format_string($this->page->course->shortname, true, array('context' => $coursecontext));
+                                    $text = get_string('enrolme', 'core_enrol', $shortname);
+                                    $url = new moodle_url('/enrol/index.php', array('id' => $this->page->course->id));
+                                    $link = new action_link($url, $text, null, null, new pix_icon('i/user', $text));
+                                    $menu->add_secondary_action($link);
+
+
+                                    // $url = new moodle_url('/enrol/index.php', array('id'=>$course->id));
+                                    // $shortname = format_string($course->shortname, true, array('context' => $coursecontext));
+                                    // $coursenode->add(get_string('enrolme', 'core_enrol', $shortname), $url, navigation_node::TYPE_SETTING, null, 'enrolself', new pix_icon('i/user', ''));
+                                    // break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
             // BEEKEE : Edit course action_menu
 
             // Course settings
@@ -617,6 +687,14 @@ class core_renderer extends \core_renderer {
                 $text = get_string('editcoursesettings');
                 $url = new moodle_url('/course/edit.php', array('id' => $this->page->course->id));
                 $link = new action_link($url, $text, null, null, new pix_icon('t/edit', $text));
+                $menu->add_secondary_action($link);
+            }
+
+            // Manage participants
+            if (has_capability('enrol/manual:manage', $context)) {
+                $text = get_string('manageparticipants','theme_beekee');
+                $url = new moodle_url('/user/index.php', array('id' => $this->page->course->id));
+                $link = new action_link($url, $text, null, null, new pix_icon('i/users', $text));
                 $menu->add_secondary_action($link);
             }
 
@@ -637,26 +715,16 @@ class core_renderer extends \core_renderer {
             }
 
             // More...
-            if (has_capability('moodle/course:changesummary', $context)) {
-                $text = get_string('morenavigationlinks');
-                $url = new moodle_url('/course/admin.php', array('courseid' => $this->page->course->id));
-                $link = new action_link($url, $text, null, null, new pix_icon('i/moremenu', $text));
-                $menu->add_secondary_action($link);
+            // Check if there is children items to show...
+            $settingsnode = $this->page->settingsnav->find('courseadmin', navigation_node::TYPE_COURSE);
+            if ($settingsnode->children) {
+                if ($settingsnode->children->count() > 1) {
+                    $text = get_string('morenavigationlinks');
+                    $url = new moodle_url('/course/admin.php', array('courseid' => $this->page->course->id));
+                    $link = new action_link($url, $text, null, null, new pix_icon('e/empty', $text));
+                    $menu->add_secondary_action($link);
+                }
             }
-
-            // $settingsnode = $this->page->settingsnav->find('courseadmin', navigation_node::TYPE_COURSE);
-            // if ($settingsnode) {
-            //     // Build an action menu based on the visible nodes from this navigation tree.
-            //     $skipped = $this->build_action_menu_from_navigation($menu, $settingsnode, false, true);
-
-            //     // We only add a list to the full settings menu if we didn't include every node in the short menu.
-            //     if ($skipped) {
-            //         $text = get_string('morenavigationlinks');
-            //         $url = new moodle_url('/course/admin.php', array('courseid' => $this->page->course->id));
-            //         $link = new action_link($url, $text, null, null, new pix_icon('t/edit', $text));
-            //         $menu->add_secondary_action($link);
-            //     }
-            // }
         } else if ($showusermenu) {
             // Get the course admin node from the settings navigation.
             $settingsnode = $this->page->settingsnav->find('useraccount', navigation_node::TYPE_CONTAINER);
@@ -1029,7 +1097,7 @@ class core_renderer extends \core_renderer {
         if (!isloggedin()) {
             $returnstr = '';
             if (!$loginpage) {
-                $returnstr .= "<a class='btn btn-login-top d-lg-none' href=\"$loginurl\">" . get_string('login') . '</a>';
+                $returnstr .= "<a class='btn btn-login-top' href=\"$loginurl\">" . get_string('login') . '</a>';
             }
 
             return html_writer::tag(
@@ -1090,7 +1158,7 @@ class core_renderer extends \core_renderer {
 
         // Role.
         if (!empty($opts->metadata['asotherrole'])) {
-            $role = core_text::strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['rolename'])));
+            $role = \core_text::strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['rolename'])));
             $usertextcontents .= html_writer::span(
                 $opts->metadata['rolename'],
                 'meta role role-' . $role
@@ -1107,7 +1175,7 @@ class core_renderer extends \core_renderer {
 
         // MNet.
         if (!empty($opts->metadata['asmnetuser'])) {
-            $mnet = strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['mnetidprovidername'])));
+            $mnet = \strtolower(preg_replace('#[ ]+#', '-', trim($opts->metadata['mnetidprovidername'])));
             $usertextcontents .= html_writer::span(
                 $opts->metadata['mnetidprovidername'],
                 'meta mnet mnet-' . $mnet

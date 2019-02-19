@@ -262,6 +262,7 @@ class course_renderer extends \core_course_renderer {
                     array('overflowdiv' => true, 'noclean' => true, 'para' => false));
             $content .= html_writer::end_tag('div'); // .summary
         }
+        
 
         // display course overview files
         $contentimages = $contentfiles = '';
@@ -353,6 +354,9 @@ class course_renderer extends \core_course_renderer {
             'data-type' => self::COURSECAT_TYPE_COURSE,
         ));
 
+        $content .= html_writer::start_tag('div', array('class' => 'card-wrapper'));
+
+
         $content .= html_writer::start_tag('div', array('class' => 'info'));
 
         // course name
@@ -388,14 +392,18 @@ class course_renderer extends \core_course_renderer {
         $content .= $this->coursecat_coursebox_content($chelper, $course);
 
 
-
-
         $content .= html_writer::end_tag('div'); // .content
-                $content .= html_writer::start_tag('div');
+        
+        $content .= html_writer::start_tag('div', array('class' => 'text-right'));
 
-        $content .= html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)), get_string('access', 'theme_beekee'), array('class' => 'card-link btn btn-primary'));
 
         $content .= html_writer::end_tag('div'); // .info
+
+        $content .= html_writer::end_tag('div'); // .card-wrapper
+
+        $content .= html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)), get_string('access', 'theme_beekee'), array('class' => 'card-link btn btn-primary course-btn'));
+
+
 
        $content .= html_writer::end_tag('div'); // .coursebox
         return $content;
@@ -420,18 +428,6 @@ class course_renderer extends \core_course_renderer {
             $course = new core_course_list_element($course);
         }
         $content = '';
-
-        // display course summary
-        if ($course->has_summary()) {
-            $content .= html_writer::start_tag('div', array('class' => 'summary'));
-
-            $content .= substr($chelper->get_course_formatted_summary($course), 0, 200) . '...';
-
-            //$content .= $chelper->get_course_formatted_summary($course,
-              //      array('overflowdiv' => false, 'noclean' => true, 'para' => false));
-
-            $content .= html_writer::end_tag('div'); // .summary
-        }
 
         // display course overview files
         $contentimages = $contentfiles = '';
@@ -471,6 +467,13 @@ class course_renderer extends \core_course_renderer {
             $content .= html_writer::end_tag('ul'); // .teachers
         }
 
+        // display course summary
+        if ($course->has_summary()) {
+            $content .= html_writer::start_tag('div', array('class' => 'summary'));
+            $content .= $chelper->get_course_formatted_summary($course,array('overflowdiv' => false, 'noclean' => true, 'para' => false));
+            $content .= html_writer::end_tag('div'); // .summary
+        }
+
         // display course category if necessary (for example in search results)
         if ($chelper->get_show_courses() == self::COURSECAT_SHOW_COURSES_EXPANDED_WITH_CAT) {
             if ($cat = core_course_category::get($course->category, IGNORE_MISSING)) {
@@ -482,7 +485,9 @@ class course_renderer extends \core_course_renderer {
             }
         }
 
-
+        // BEEKEE : Fadeout to hide overflow text
+        $content .= html_writer::start_tag('div', array('class' => 'fadeout'));
+        $content .= html_writer::end_tag('div'); // .summary
         return $content;
     }
 
