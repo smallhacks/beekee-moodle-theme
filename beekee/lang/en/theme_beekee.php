@@ -20,12 +20,15 @@ $string['logotext'] = 'LEARNING. TEACHING. EVERYWHERE.';
 $string['editfrontpage'] = 'Edit this page';
 $string['manageusers'] = 'Manage users';
 $string['importcourse'] = 'Import course';
+$string['boxadministration'] = 'Box administration';
 $string['siteadministration'] = 'Site administration';
+
 
 // Course access button
 $string['access'] = 'Access';
 
 // Course page menu items
+$string['manageparticipants'] = 'Manage participants';
 $string['backupcourse'] = 'Backup course';
 $string['restorecourse'] = 'Restore course';
 

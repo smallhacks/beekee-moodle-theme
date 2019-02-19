@@ -51,14 +51,14 @@ if (has_capability('moodle/site:config', context_system::instance())) {
 }
 
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
-$centertopblockshtml = $OUTPUT->blocks('center-top');
+// $centertopblockshtml = $OUTPUT->blocks('center-top');
 $blockshtml = $OUTPUT->blocks('side-pre');
 $hasblocks = strpos($blockshtml, 'data-block=') !== false;
 $regionmainsettingsmenu = $OUTPUT->region_main_settings_menu();
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
-    'centertopblocks' => $centertopblockshtml,
+    // 'centertopblocks' => $centertopblockshtml,
     'sidepreblocks' => $blockshtml,
     'hasblocks' => $hasblocks,
     'bodyattributes' => $bodyattributes,
