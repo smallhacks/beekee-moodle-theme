@@ -1,0 +1,81 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+
+    @template theme_boost/primary-drawer-mobile
+
+    This template renders the mobile version of the top navbar menu in a drawer.
+
+    Example context (json):
+    {
+        "output": {
+            "should_display_navbar_logo": true,
+            "get_compact_logo_url": "http://placekitten.com/50/50"
+        },
+        "mobileprimarynav": [
+            {
+                "text": "Dashboard",
+                "url": "/my",
+                "isactive": "true"
+            },
+            {
+                "text": "Site home",
+                "url": "/",
+                "isactive": "false"
+            },
+            {
+                "text": "My courses",
+                "url": "/course",
+                "isactive": "false"
+            }
+        ]
+    }
+}}
+
+{{< theme_boost/drawer }}
+    {{$id}}theme_boost-drawers-primary{{/id}}
+    {{$drawerclasses}}drawer drawer-left drawer-primary{{/drawerclasses}}
+    {{$drawercloseonresize}}1{{/drawercloseonresize}}
+    {{$drawerheading}}
+        {{# output.should_display_navbar_logo }}
+            <img src="{{output.get_compact_logo_url}}" class="logo py-1 h-100" alt="{{sitename}}">
+        {{/ output.should_display_navbar_logo }}
+        {{^ output.should_display_navbar_logo }}
+            {{{ sitename }}}
+        {{/ output.should_display_navbar_logo }}
+    {{/drawerheading}}
+    {{$drawercontent}}
+        <div class="" style="max-width: 200px;
+    margin-bottom: 30px;
+    padding-left: 20px;">
+            <a href="{{{home_url}}}">
+            <img src="{{{compact_logo_url}}}" style="width:100%" />
+            </a>
+        </div>
+        <div class="list-group">
+            <!-- BEEKEE -->
+            <a data-key="mycourses" href="{{mycourses_url}}" class="list-group-item list-group-item-action  ">{{mycourses_page_title}}</a>
+            <a data-key="dashboard" href="{{mybadges_url}}" class="list-group-item list-group-item-action  ">{{mybadges_page_title}}</a>
+            <a data-key="about" href="{{about_url}}" class="list-group-item list-group-item-action  ">{{about_page_title}}</a>
+            {{#is_admin}}
+                <a data-key="siteadminnode" href="{{admin_url}}" class="list-group-item list-group-item-action  ">{{admin_title}}</a>
+            {{/is_admin}}
+            <!-- /BEEKEE -->
+        </div>
+    {{/drawercontent}}
+    {{$drawerstate}}show-drawer-primary{{/drawerstate}}
+{{/ theme_boost/drawer}}
