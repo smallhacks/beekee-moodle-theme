@@ -127,6 +127,7 @@
                 {{/hasblocks}}
             </div>
             {{{ output.full_header }}}
+            <div class="page-subheader">{{#str}}mycourses_subheader, theme_beekee_theme{{/str}}</div>
             {{#secondarymoremenu}}
                 <div class="secondary-navigation d-print-none">
                     {{> core/moremenu}}
@@ -140,6 +141,7 @@
                     </div>
                     {{/hasregionmainsettingsmenu}}
                     <section id="region-main" aria-label="{{#str}}content{{/str}}">
+                <div role="main">
 
                         {{#hasregionmainsettingsmenu}}
                             <div class="region_main_settings_menu_proxy"></div>
@@ -156,39 +158,20 @@
                             </div>
                         {{/overflow}}
                         <div style="display:none">
-                            {{{ output.main_content }}}
+                        {{{ output.main_content }}}
                         </div>
-
-                        <div id="topofscroll" class="main-inner">
-    <div id="page-content" class="pb-3 d-print-block">
-        <div id="region-main-box">
-            {{#hasregionmainsettingsmenu}}
-                <div id="region-main-settings-menu" class="d-print-none">
-                    <div> {{{ regionmainsettingsmenu }}} </div>
-                </div>
-            {{/hasregionmainsettingsmenu}}
-            <section id="region-main" aria-label="{{#str}}content{{/str}}">
-                <div role="main">
-                    <h1 class="beekee-page-title">{{{mycourses_page_header_title}}}</h1>
-                    <div class="beekee-page-description" class="mb-5">
-                        Below you will find all the courses available to you grouped by program. While you can complete the courses in any order you would like, you will need to complete all the courses in a program in order to receive the program-specific badge.
-                    </div>
-                    {{#categories_list}}
+                                            {{#categories_list}}
                         <div class="beekee-category-wrapper">
-                            <h4>{{{name}}}</h4>
-                            <div class="py-3" style="">{{{description}}}</div>
+                            <h3>{{{name}}}</h3>
+                            <div class="pb-3" style="">{{{description}}}</div>
                             <div class="container-fluid p-0">
                                 <div class="card-deck dashboard-card-deck">
                                     {{#courses_list}}
                                         <div class="course-card">
-                                        {{#course_letter}}
-                                            <p class="course-letter">{{{course_letter}}}</p>
-                                        {{/course_letter}}
-                                            <div class="title">
-                                                <h3>{{{fullname}}}</h3>
-                                            </div>
+                                          <img class="card-img-top" src="{{imageurl}}" alt="Card image cap">
                                             <div class="description">
-                                                <p>{{{summary}}}</p>
+                                            <h4>{{{fullname}}}</h4>
+                                                <!-- <p>{{{summary}}}</p> -->
                                             </div>
                                             {{#is_course_started}}
                                                 {{#is_course_completed}}
@@ -211,12 +194,6 @@
                             </div>
                         </div>
                     {{/categories_list}}
-                </div>
-            </section>
-        </div>
-    </div>
-</div>
-
                         {{{ output.activity_navigation }}}
                         {{{ output.course_content_footer }}}
 
@@ -224,7 +201,7 @@
                 </div>
             </div>
         </div>
-        {{> theme_beekee_theme/footer }}
+        {{> theme_boost/footer }}
     </div>
     {{{ output.standard_after_main_region_html }}}
 </div>

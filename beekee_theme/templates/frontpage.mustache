@@ -91,6 +91,8 @@
     {{/hasblocks}}
     <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers {{#courseindexopen}}show-drawer-left{{/courseindexopen}} {{#blockdraweropen}}show-drawer-right{{/blockdraweropen}} drag-container">
         <div id="topofscroll" class="main-inner">
+            <div class="frontpage-banner"></div>
+            <div class="frontpage-banner-title">{{{frontpage_banner_title}}}</div>
             <div class="drawer-toggles d-flex">
                 {{#courseindex}}
                     <div class="drawer-toggler drawer-left-toggle open-nav d-print-none">
@@ -140,6 +142,7 @@
                     </div>
                     {{/hasregionmainsettingsmenu}}
                     <section id="region-main" aria-label="{{#str}}content{{/str}}">
+
                         {{#hasregionmainsettingsmenu}}
                             <div class="region_main_settings_menu_proxy"></div>
                         {{/hasregionmainsettingsmenu}}
@@ -157,15 +160,12 @@
                         {{{ output.main_content }}}
                         {{{ output.activity_navigation }}}
                         {{{ output.course_content_footer }}}
-                        <div class="text-center ml-auto mr-auto">
-                        <h3 class="mb-4">Choose your language:</h3>
-                        {{{language_selection_form}}}
-                        </div>
+
                     </section>
                 </div>
             </div>
         </div>
-        {{> theme_beekee_theme/footer }}
+        {{> theme_boost/footer }}
     </div>
     {{{ output.standard_after_main_region_html }}}
 </div>

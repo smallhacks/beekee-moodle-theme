@@ -126,7 +126,8 @@
                     </div>
                 {{/hasblocks}}
             </div>
-            {{{ output.full_header }}}
+            <h1 class="beekee-page-title">{{#str}}courseslist_page_header_title, theme_beekee_theme{{/str}}</h1>
+            <div class="page-subheader">{{#str}}courseslist_subheader, theme_beekee_theme{{/str}}</div>
             {{#secondarymoremenu}}
                 <div class="secondary-navigation d-print-none">
                     {{> core/moremenu}}
@@ -140,6 +141,7 @@
                     </div>
                     {{/hasregionmainsettingsmenu}}
                     <section id="region-main" aria-label="{{#str}}content{{/str}}">
+                <div role="main">
 
                         {{#hasregionmainsettingsmenu}}
                             <div class="region_main_settings_menu_proxy"></div>
@@ -155,7 +157,31 @@
                                 </div>
                             </div>
                         {{/overflow}}
+                        <div style="display:none">
                         {{{ output.main_content }}}
+                        </div>
+                                            {{#categories_list}}
+                        <div class="beekee-category-wrapper">
+                            <h3>{{{name}}}</h3>
+                            <div class="pb-3" style="">{{{description}}}</div>
+                            <div class="container-fluid p-0">
+                                <div class="card-deck dashboard-card-deck">
+                                    {{#courses_list}}
+                                        <div class="course-card">
+                                          <img class="card-img-top" src="{{imageurl}}" alt="Card image cap">
+                                            <div class="description">
+                                            <h4>{{{fullname}}}</h4>
+                                                <!-- <p>{{{summary}}}</p> -->
+                                            </div>
+                                            <div style="height:20px; font-size:0.8em"></div>
+                                            <a href="{{{url}}}" class="btn btn-secondary">View course</a>
+                                            <br>
+                                        </div>
+                                    {{/courses_list}}
+                                </div>
+                            </div>
+                        </div>
+                    {{/categories_list}}
                         {{{ output.activity_navigation }}}
                         {{{ output.course_content_footer }}}
 
@@ -163,7 +189,7 @@
                 </div>
             </div>
         </div>
-        {{> theme_beekee_theme/footer }}
+        {{> theme_boost/footer }}
     </div>
     {{{ output.standard_after_main_region_html }}}
 </div>

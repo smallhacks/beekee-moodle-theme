@@ -127,6 +127,7 @@
                 {{/hasblocks}}
             </div>
             {{{ output.full_header }}}
+            <div class="page-subheader">{{#str}}mydashboard_subheader, theme_beekee_theme{{/str}}</div>
             {{#secondarymoremenu}}
                 <div class="secondary-navigation d-print-none">
                     {{> core/moremenu}}
@@ -155,41 +156,7 @@
                                 </div>
                             </div>
                         {{/overflow}}
-                        <div style="display:none">
-                            {{{ output.main_content }}}
-                        </div>
-
-<div id="topofscroll" class="main-inner">
-    <div id="page-content" class="pb-3 d-print-block">
-        <div id="region-main-box">
-            {{#hasregionmainsettingsmenu}}
-                <div id="region-main-settings-menu" class="d-print-none">
-                    <div> {{{ regionmainsettingsmenu }}} </div>
-                </div>
-            {{/hasregionmainsettingsmenu}}
-            <section id="region-main" aria-label="{{#str}}content{{/str}}">
-                <div role="main">
-                    <h1 class="beekee-page-title">Your badges</h1>
-                    <div class="beekee-page-description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    </div>
-                    <div class="beekee-category-wrapper py-5 mt-5">
-                        {{#badges_earned}}
-                            <div class="d-inline-block p-3" style="width:150px;height:200px;vertical-align:top">
-                                <img style="width:100%;margin-bottom:15px" src="{{{imageurl}}}" /><br>
-                                {{#download_badge_url}}<a href="{{{download_badge_url}}}" class="btn btn-primary">Download</a>{{/download_badge_url}}
-                            </div>
-                        {{/badges_earned}}
-                        {{^badges_earned}}
-                            <h5>You Haven’t Earned Any Badges Yet.</h5>
-                        {{/badges_earned}}
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-</div>
-
+                        {{{ output.main_content }}}
                         {{{ output.activity_navigation }}}
                         {{{ output.course_content_footer }}}
 
@@ -197,7 +164,7 @@
                 </div>
             </div>
         </div>
-        {{> theme_beekee_theme/footer }}
+        {{> theme_boost/footer }}
     </div>
     {{{ output.standard_after_main_region_html }}}
 </div>

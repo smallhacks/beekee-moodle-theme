@@ -16,7 +16,7 @@
 }}
 {{!
 
-    @template theme_boost/frontpage_navbar
+    @template theme_boost/navbar
 
     This template renders the top navbar.
 
@@ -55,7 +55,7 @@
         ]
     }
 }}
-<nav class="beekee-frontpage-navbar navbar fixed-top navbar-light bg-white navbar-expand" aria-label="{{#str}}sitemenubar, admin{{/str}}">
+<nav class="navbar fixed-top navbar-light bg-white navbar-expand" aria-label="{{#str}}sitemenubar, admin{{/str}}">
 
     <button class="navbar-toggler aabtn d-block d-md-none px-1 my-1 border-0" data-toggler="drawers" data-action="toggle" data-target="theme_boost-drawers-primary">
         <span class="navbar-toggler-icon"></span>
@@ -65,40 +65,15 @@
     <a href="{{{ config.homeurl }}}" class="navbar-brand d-none d-md-flex align-items-center m-0 mr-4 p-0 aabtn">
 
         {{# output.should_display_navbar_logo }}
-            <img src="{{output.get_compact_logo_url}}" class="logo mr-1" alt="{{sitename}}">
+            <img src="{{output.get_logo_url}}" class="logo mr-1" alt="{{sitename}}">
         {{/ output.should_display_navbar_logo }}
         {{^ output.should_display_navbar_logo }}
             {{{ sitename }}}
         {{/ output.should_display_navbar_logo }}
     </a>
     {{#primarymoremenu}}
-        <div class="primary-navigation hide-if-not-logged-in">
-        <!-- BEEKEE -->
-        <nav class="beekee_custom_moremenu navigation">
-                    <ul id="moremenu-6363d73937b4d-navbar-nav" role="menubar" class="nav more-nav navbar-nav">
-                        <li data-key="mycourses" class="nav-item" role="none" data-forceintomoremenu="false">
-                            <a role="menuitem" class="nav-link"  href="{{mycourses_url}}" tabindex="-1">{{mycourses_page_title}}
-                            </a>
-                        </li>
-                        <li data-key="dashboard" class="nav-item" role="none" data-forceintomoremenu="false">
-                            <a role="menuitem" class="nav-link"  href="{{mybadges_url}}" tabindex="-1">{{mybadges_page_title}}
-                            </a>
-                        </li>
-                        <li data-key="about" class="nav-item" role="none" data-forceintomoremenu="false">
-                            <a role="menuitem" class="nav-link"  href="{{about_url}}" tabindex="-1">{{{about_page_title}}}
-                            </a>
-                        </li>
-                        {{#is_admin}}
-                            <li data-key="siteadminnode" class="nav-item" role="none" data-forceintomoremenu="false">
-                                <a role="menuitem" class="nav-link"  href="{{admin_url}}" tabindex="-1"><i class="icon fa fa-cog fa-fw " title="Site administration" role="img" aria-label="Site administration"></i>
-                                </a>
-                            </li>
-                        {{/is_admin}}
-                        <li role="none" class="nav-item dropdown dropdownmoremenu" data-region="morebutton">
-                        </li>
-                    </ul>
-                </nav>
-
+        <div class="primary-navigation">
+            {{> core/moremenu}}
         </div>
     {{/primarymoremenu}}
 

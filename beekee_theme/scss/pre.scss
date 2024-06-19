@@ -1,0 +1,27 @@
+// Pre SCSS for the theme.
+
+$primary: #0F0F41;
+//$secondary: ;
+
+
+/* Titles Font */
+@font-face {
+  font-family: 'font-1';
+  font-style: normal;
+  font-weight: normal;
+      src: url([[font:theme|Myriad-Pro-Bold.ttf]]) format('truetype');
+      src: url([[font:theme|Myriad-Pro-Bold.eot]]);
+      src: url([[font:theme|Myriad-Pro-Bold.eot]]) format('embedded-opentype'),
+           url([[font:theme|Myriad-Pro-Bold.woff]]) format('woff');
+}
+
+/* Paraphraphs Font */
+@font-face {
+  font-family: 'font-2';
+  font-style: normal;
+  font-weight: normal;
+      src: url([[font:theme|calibri-regular.ttf]]) format('truetype');
+      src: url([[font:theme|calibri-regular.eot]]);
+      src: url([[font:theme|calibri-regular.eot]]) format('embedded-opentype'),
+           url([[font:theme|calibri-regular.woff]]) format('woff');
+}

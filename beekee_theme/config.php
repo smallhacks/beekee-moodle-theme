@@ -12,7 +12,7 @@ defined('MOODLE_INTERNAL') || die();
 $THEME->name = 'beekee_theme'; 
 
 // Show theme in theme selector
-$THEME->hidefromselector = false;
+//$THEME->hidefromselector = false;
 
  
 // This setting list the style sheets we want to include in our theme. Because we want to use SCSS instead of CSS - we won't        
@@ -20,7 +20,8 @@ $THEME->hidefromselector = false;
 // extensions.                                                                                                                      
 //$THEME->sheets = [];                                                                                                            
  
-$THEME->sheets = array('style');                                                                                                          
+//$THEME->sheets = array('style');                                                                                                          
+$THEME->sheets = [];                                                                                                                
 
 // This is a setting that can be used to provide some styling to the content in the TinyMCE text editor. This is no longer the      
 // default text editor and "Atto" does not need this setting so we won't provide anything. If we did it would work the same         
@@ -28,15 +29,21 @@ $THEME->sheets = array('style');
 $THEME->editor_sheets = [];    
 
 
-//$THEME->scss = 'style';                                                                                                         
-$THEME->scss = function($theme) {
- 
-    // We need to load the config for our parent theme because that is where the preset setting is defined.
-    //$parentconfig = theme_config::load('boost');
-    // Call a function from our parent themes lib.php file to fetch the content of the themes main SCSS file based on it's own config, not ours.
+//$THEME->scss = 'main';
 
-    return theme_beekee_theme_get_main_scss_content($theme);
-};                                                                                                    
+
+//$THEME->scss = 'style';                                                                                                         
+// $THEME->scss = function($theme) {
+ 
+//     // We need to load the config for our parent theme because that is where the preset setting is defined.
+//     //$parentconfig = theme_config::load('boost');
+//     // Call a function from our parent themes lib.php file to fetch the content of the themes main SCSS file based on it's own config, not ours.
+
+//     return theme_beekee_theme_get_main_scss_content($theme);
+// };
+// Pre and extra SCSS
+//$THEME->prescsscallback = 'theme_lac_get_pre_scss';
+// $THEME->extrascsscallback = 'theme_lac_scss_get_extra_scss';                                                                                                     
 
 // This is a critical setting. We want to inherit from theme_boost because it provides a great starting point for SCSS bootstrap4   
 // themes. We could add more than one parent here to inherit from multiple parents, and if we did they would be processed in        
@@ -46,8 +53,8 @@ $THEME->parents = ['boost'];
  
 // A dock is a way to take blocks out of the page and put them in a persistent floating area on the side of the page. Boost         
 // does not support a dock so we won't either - but look at bootstrapbase for an example of a theme with a dock.                    
-$THEME->enable_dock = false;
-
+$THEME->enable_dock = false;                                                                                                        
+ 
 // This is an old setting used to load specific CSS for some YUI JS. We don't need it in Boost based themes because Boost           
 // provides default styling for the YUI modules that we use. It is not recommended to use this setting anymore.                     
 $THEME->yuicssmodules = array();                                                                                                    
@@ -63,41 +70,40 @@ $THEME->requiredblocks = '';
 // This is a feature that tells the blocks library not to use the "Add a block" block. We don't want this in boost based themes because
 // it forces a block region into the page when editing is enabled and it takes up too much room.
 $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
-
 $THEME->haseditswitch = true;
 
-// By default, all boost theme do not need their titles displayed.
-$THEME->activityheaderconfig = [
-    'notitle' => true
-];
+// This is the function that returns the SCSS source for the main file in our theme. We override the boost version because          
+// we want to allow presets uploaded to our own theme file area to be selected in the preset list.                                  
+$THEME->scss = function($theme) {                                                                                                   
+    return theme_beekee_theme_get_main_scss_content($theme);                                                                               
+};
 
 $THEME->layouts = [
     // The site home page.
-    // 'frontpage' => array(
-    //     'file' => 'frontpage.php',
-    //     'regions' => array('center-top','side-pre'),
-    //     'defaultregion' => 'side-pre',
-    //     'options' => array('nonavbar' => true),
-    // ),
-    // // My public page.
-    // 'mypublic' => array(
-    //     'file' => 'mypublic.php',
-    //     'regions' => array('center-top','side-pre'),
-    //     'defaultregion' => 'side-pre',
-    //     'options' => array('nonavbar' => true),
-    // ),
-    // // My courses page.
-    // 'mycourses' => array(
-    //     'file' => 'mycourses.php',
-    //     'regions' => array('center-top','side-pre'),
-    //     'defaultregion' => 'side-pre',
-    //     'options' => array('nonavbar' => true),
-    // ),
-    // // My badges page.
-    // 'mydashboard' => array(
-    //     'file' => 'mybadges.php',
-    //     'regions' => array('center-top','side-pre'),
-    //     'defaultregion' => 'side-pre',
-    //     'options' => array('nonavbar' => true),
-    // )
+    'frontpage' => array(
+        'file' => 'frontpage.php',
+        'regions' => array('side-pre'),
+        'defaultregion' => 'side-pre',
+        'options' => array('nonavbar' => true),
+    ),
+    // My dashboard page.
+    'mydashboard' => array(
+        'file' => 'mydashboard.php',
+        'regions' => array('side-pre'),
+        'defaultregion' => 'side-pre',
+        'options' => array('nonavbar' => true, 'langmenu' => true),
+    ),
+    // My courses page.
+    'mycourses' => array(
+        'file' => 'mycourses.php',
+        'regions' => array('center-top','side-pre'),
+        'defaultregion' => 'side-pre',
+        'options' => array('nonavbar' => true),
+    ),
+    // Courses list page
+    'coursecategory' => array(
+        'file' => 'courseslist.php',
+        'regions' => array('side-pre'),
+        'defaultregion' => 'side-pre',
+    )
 ];
